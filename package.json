@@ -38,7 +38,8 @@
   "devDependencies": {
     "@extjs/reactor-babel-plugin": "^0.2.0",
     "@extjs/reactor-webpack-plugin": "^0.2.4",
-    "concurrently": "^3.1.0"
+    "concurrently": "^3.1.0",
+    "html-webpack-plugin": "^2.26.0"
   },
   "description": ""
 }

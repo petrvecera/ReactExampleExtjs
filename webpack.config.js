@@ -1,18 +1,25 @@
 const ExtJSReactWebpackPlugin = require('@extjs/reactor-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/clientExtjs.js',
+  devtool: 'inline-source-map',
+
   output: {
     path: './public',
     filename: 'bundle.js'       
   },
   plugins: [
-        new ExtJSReactWebpackPlugin({
-            sdk: 'c:\\Users\\Admin\\Documents\\Architect\\frameworks\\ext62\\6.2.1.167\\commercial', // location of Ext JS SDK
-            theme: 'theme-material',
-            packages: ['charts']
-        })
-    ],
+      new ExtJSReactWebpackPlugin({
+          sdk: '/Users/mbrocato/sencha/ext-6.2.1', // location of Ext JS SDK
+          theme: 'theme-material',
+          packages: ['charts']
+      }),
+      new HtmlWebpackPlugin({
+          template: 'src/index.html',
+          hash: true
+      })
+  ],
   module: {
     loaders: [
       {
