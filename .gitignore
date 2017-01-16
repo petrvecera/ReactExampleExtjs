@@ -6,3 +6,4 @@ ext
 .sencha
 npm-debug.log*
 lerna.debug.log
+public
