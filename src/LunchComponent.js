@@ -169,7 +169,12 @@ export default class LunchComponent extends React.Component {
                             activate: () => {
                                 this.bastaSoupsStore.load();
                                 this.bastaStore.load();
-                                Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(0)
+                                if( typeof Ext.ComponentQuery.query('#lunchTabPanel1')[0] != 'undefined')
+                                {
+                                    console.log('CHECKPOINT');
+                                    Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(0)
+
+                                }
                             }
                         }} >
                         <Grid width="100%" height="150"
@@ -276,7 +281,7 @@ export default class LunchComponent extends React.Component {
                                activate: () => {
                                    this.jarosiSoupsStore.load();
                                    this.jarosiStore.load();
-                                   //Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(0)
+                                   Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(0)
                                }
                            }} >
                     <Grid width="100%" height="100" title="U jarosu"
