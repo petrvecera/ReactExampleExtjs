@@ -2,7 +2,7 @@ const ExtJSReactWebpackPlugin = require('@extjs/reactor-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 module.exports = {
-    devtool: 'inline-source-map',
+    devtool: 'cheap-module-source-map',
     entry: './src/clientExtjs.js',
     output: {
         path: './public',
@@ -12,14 +12,14 @@ module.exports = {
         new ExtJSReactWebpackPlugin({
             sdk: 'c:\\Users\\ToolsTeam\\Documents\\Architect\\frameworks\\ext62\\6.2.1.167\\commercial', // location of Ext JS SDK
             theme: 'theme-material',
-            packages: ['charts']
+            production: true
         }),
         new HtmlWebpackPlugin({
             template: 'src/index.html',
             hash: true
         }),
         new webpack.optimize.OccurenceOrderPlugin(true),
-        new webpack .optimize.DedupePlugin(),
+        new webpack.optimize.DedupePlugin(),
         new webpack.DefinePlugin({
             'process.env':{
                 'NODE_ENV' : JSON.stringify('production'),

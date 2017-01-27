@@ -11,8 +11,7 @@ module.exports = {
   plugins: [
       new ExtJSReactWebpackPlugin({
           sdk: 'c:\\Users\\ToolsTeam\\Documents\\Architect\\frameworks\\ext62\\6.2.1.167\\commercial', // location of Ext JS SDK
-          theme: 'theme-material',
-          packages: ['charts']
+          theme: 'theme-material'
       }),
       new HtmlWebpackPlugin({
           template: 'src/index.html',

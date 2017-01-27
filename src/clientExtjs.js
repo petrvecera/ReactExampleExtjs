@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { install } from '@extjs/reactor';
-import { Panel } from '@extjs/reactor/modern';
 import LunchComponent from './LunchComponent';
 
 

@@ -18,7 +18,12 @@ Then, run the following to clone and build the project:
     cd ReactExampleExtjs
     npm install
     
+    
 Copy your Ext JS SDK into ReactExampleExtjs/ext, then run
 
     npm run dev
+
+, for developer build in watch mode or run
+
+    npm run prod
     
