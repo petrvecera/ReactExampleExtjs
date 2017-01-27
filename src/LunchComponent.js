@@ -164,11 +164,7 @@ export default class LunchComponent extends React.Component {
                 <TabPanel id="lunchTabPanel"
                     fullscreen="true"
                     height="400"
-                    tabBarPosition="top"
-                    /*listeners={{
-                        activate: () => { console.log("TabPanel !!!"); }
-                    }}*/
-                    >
+                    tabBarPosition="top">
                     <Container title="Monday" id="MondayContainer"
                                fullscreen="true"
                         listeners={{
@@ -184,7 +180,6 @@ export default class LunchComponent extends React.Component {
                         }} >
                         <LunchDaySoupGrid store={this.bastaSoupsStore}title={bastaTitle}/>
                         <LunchDayMealGrid store={this.bastaStore} />
-                       
                     </Container>
                     <Container title="Tuesday" id="TuesdayContainer"
                                fullscreen="true"
