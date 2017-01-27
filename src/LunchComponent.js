@@ -1,9 +1,13 @@
 import React from 'react';
 import { Panel, TabPanel, Grid, Container } from "@extjs/reactor/modern";
 import LunchDayContainer from "./components/LunchDayContainer";
+import {LunchDaySoupGrid,LunchDayMealGrid} from './components/LunchDayGrid';
+
 Ext.require([
     'Ext.grid.*',
 ])
+
+
 export default class LunchComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -153,6 +157,8 @@ export default class LunchComponent extends React.Component {
 
 
     render() {
+            var bastaTitle="Pustkovecká Bašta"
+            var jarosiTitle="U Jarošů"
         return (
             <Container width="100%" height="100%">
                 <TabPanel id="lunchTabPanel"
@@ -171,23 +177,14 @@ export default class LunchComponent extends React.Component {
                                 this.bastaStore.load();
                                 if( typeof Ext.ComponentQuery.query('#lunchTabPanel1')[0] != 'undefined')
                                 {
-                                    console.log('CHECKPOINT');
                                     Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(0)
 
                                 }
                             }
                         }} >
-                        <Grid width="100%" height="150"
-                              title="Basta"
-                            store={this.bastaSoupsStore}
-                            columns={[
-                                { text: 'Soups of the day', dataIndex: 'soup', flex: 1 }
-                            ]} />
-                        <Grid width="100%" height="200"
-                            store={this.bastaStore}
-                            columns={[
-                                { text: 'Meals of the day', dataIndex: 'meals', flex: 1 }
-                            ]} />
+                        <LunchDaySoupGrid store={this.bastaSoupsStore}title={bastaTitle}/>
+                        <LunchDayMealGrid store={this.bastaStore} />
+                       
                     </Container>
                     <Container title="Tuesday" id="TuesdayContainer"
                                fullscreen="true"
@@ -198,16 +195,8 @@ export default class LunchComponent extends React.Component {
                                 Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(1)
                             }
                         }}>
-                        <Grid width="100%" height="100"
-                            store={this.bastaSoupsStore}
-                            columns={[
-                                { text: 'Soups of the day', dataIndex: 'soup', flex: 1 }
-                            ]} />
-                        <Grid width="100%" height="200"
-                            store={this.bastaStore}
-                            columns={[
-                                { text: 'Meals of the day', dataIndex: 'meals', flex: 1 }
-                            ]} />
+                        <LunchDaySoupGrid store={this.bastaSoupsStore}title={bastaTitle}/>
+                        <LunchDayMealGrid store={this.bastaStore} />
                     </Container>
                     <Container title="Wednesday" id="WednesdayContainer"
                                fullscreen="true"
@@ -218,16 +207,8 @@ export default class LunchComponent extends React.Component {
                                 Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(2)
                             }
                         }} >
-                        <Grid width="100%" height="100"
-                            store={this.bastaSoupsStore}
-                            columns={[
-                                { text: 'Soups of the day', dataIndex: 'soup', flex: 1 }
-                            ]} />
-                        <Grid width="100%" height="200"
-                            store={this.bastaStore}
-                            columns={[
-                                { text: 'Meals of the day', dataIndex: 'meals', flex: 1 }
-                            ]} />
+                        <LunchDaySoupGrid store={this.bastaSoupsStore}title={bastaTitle}/>
+                        <LunchDayMealGrid store={this.bastaStore} />
                     </Container>
                     <Container title="Thursday" id="ThursdayContainer"
                                fullscreen="true"
@@ -238,16 +219,8 @@ export default class LunchComponent extends React.Component {
                                        Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(3)
                                    }
                                }}>
-                        <Grid width="100%" height="100"
-                            store={this.bastaSoupsStore}
-                            columns={[
-                                { text: 'Soups of the day', dataIndex: 'soup', flex: 1 }
-                            ]} />
-                        <Grid width="100%" height="200"
-                            store={this.bastaStore}
-                            columns={[
-                                { text: 'Meals of the day', dataIndex: 'meals', flex: 1 }
-                            ]} />
+                        <LunchDaySoupGrid store={this.bastaSoupsStore} title={bastaTitle}/>
+                        <LunchDayMealGrid store={this.bastaStore} />
                     </Container>
                     <Container title="Friday" id="FridayContainer"
                                fullscreen="true"
@@ -258,16 +231,8 @@ export default class LunchComponent extends React.Component {
                                        Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(4)
                                    }
                                }}>
-                        <Grid width="100%" height="100"
-                            store={this.bastaSoupsStore}
-                            columns={[
-                                { text: 'Soups of the day', dataIndex: 'soup', flex: 1 }
-                            ]} />
-                        <Grid width="100%" height="200"
-                            store={this.bastaStore}
-                            columns={[
-                                { text: 'Meals of the day', dataIndex: 'meals', flex: 1 }
-                            ]} />
+                        <LunchDaySoupGrid store={this.bastaSoupsStore}title={bastaTitle}/>
+                        <LunchDayMealGrid store={this.bastaStore} />
                     </Container>
                 </TabPanel>
                 <TabPanel
@@ -284,16 +249,8 @@ export default class LunchComponent extends React.Component {
                                    Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(0)
                                }
                            }} >
-                    <Grid width="100%" height="100" title="U jarosu"
-                          store={this.jarosiSoupsStore}
-                          columns={[
-                              { text: 'Soups of the day', dataIndex: 'soup', flex: 1 }
-                          ]} />
-                    <Grid width="100%" height="200"
-                          store={this.jarosiStore}
-                          columns={[
-                              { text: 'Meals of the day', dataIndex: 'meals', flex: 1 }
-                          ]} />
+                    <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
+                    <LunchDayMealGrid store={this.bastaStore} />
                 </Container>
                 <Container title="Tuesday" id="TuesdayContainer1"
                            fullscreen="true"
@@ -304,16 +261,8 @@ export default class LunchComponent extends React.Component {
                                    Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(1)
                                }
                            }}>
-                    <Grid width="100%" height="100"
-                          store={this.jarosiSoupsStore}
-                          columns={[
-                              { text: 'Soups of the day', dataIndex: 'soup', flex: 1 }
-                          ]} />
-                    <Grid width="100%" height="200"
-                          store={this.jarosiStore}
-                          columns={[
-                              { text: 'Meals of the day', dataIndex: 'meals', flex: 1 }
-                          ]} />
+                    <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
+                    <LunchDayMealGrid store={this.bastaStore} />
                 </Container>
                 <Container title="Wednesday" id="WednesdayContainer1"
                            fullscreen="true"
@@ -324,16 +273,8 @@ export default class LunchComponent extends React.Component {
                                    Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(2)
                                }
                            }} >
-                    <Grid width="100%" height="100"
-                          store={this.bastaSoupsStore}
-                          columns={[
-                              { text: 'Soups of the day', dataIndex: 'soup', flex: 1 }
-                          ]} />
-                    <Grid width="100%" height="200"
-                          store={this.bastaStore}
-                          columns={[
-                              { text: 'Meals of the day', dataIndex: 'meals', flex: 1 }
-                          ]} />
+                    <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
+                    <LunchDayMealGrid store={this.bastaStore} />
                 </Container>
                 <Container title="Thursday" id="ThursdayContainer1"
                            fullscreen="true"
@@ -344,16 +285,8 @@ export default class LunchComponent extends React.Component {
                                    Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(3)
                                }
                            }}>
-                    <Grid width="100%" height="100"
-                          store={this.bastaSoupsStore}
-                          columns={[
-                              { text: 'Soups of the day', dataIndex: 'soup', flex: 1 }
-                          ]} />
-                    <Grid width="100%" height="200"
-                          store={this.bastaStore}
-                          columns={[
-                              { text: 'Meals of the day', dataIndex: 'meals', flex: 1 }
-                          ]} />
+                    <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
+                    <LunchDayMealGrid store={this.bastaStore} />
                 </Container>
                 <Container title="Friday" id="FridayContainer1"
                            fullscreen="true"
@@ -364,16 +297,8 @@ export default class LunchComponent extends React.Component {
                                    Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(4)
                                }
                            }}>
-                    <Grid width="100%" height="100"
-                          store={this.bastaSoupsStore}
-                          columns={[
-                              { text: 'Soups of the day', dataIndex: 'soup', flex: 1 }
-                          ]} />
-                    <Grid width="100%" height="200"
-                          store={this.bastaStore}
-                          columns={[
-                              { text: 'Meals of the day', dataIndex: 'meals', flex: 1 }
-                          ]} />
+                    <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
+                    <LunchDayMealGrid store={this.bastaStore} />
                 </Container>
 
                 </TabPanel>
