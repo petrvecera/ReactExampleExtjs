@@ -13,7 +13,6 @@ export class LunchDaySoupGrid extends React.Component {
             width="100%"
             height="150"
             disableSelection={true}
-            titleAlign={'center'}
             title={this.props.title}
             store={this.props.store}
             columns={[{

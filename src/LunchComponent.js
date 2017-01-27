@@ -1,6 +1,5 @@
 import React from 'react';
 import { Panel, TabPanel, Grid, Container } from "@extjs/reactor/modern";
-import LunchDayContainer from "./components/LunchDayContainer";
 import {LunchDaySoupGrid,LunchDayMealGrid} from './components/LunchDayGrid';
 
 Ext.require([
