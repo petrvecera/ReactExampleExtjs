@@ -15,7 +15,8 @@ export default class LunchComponent extends React.Component {
             autoLoad: true,
             fields: [{
                 name: 'soups', convert: function (v, record) {
-                }
+                },
+                name: 'day'
             }],
             proxy: {
                 type: 'ajax',
@@ -24,9 +25,9 @@ export default class LunchComponent extends React.Component {
                     rootProperty: 'days'
 
                 }
-            },
+            }
 
-        })
+        });
         this.bastaStore = Ext.create('Ext.data.Store', {
             autoLoad: true,
             fields: ['meals'],
@@ -34,9 +35,8 @@ export default class LunchComponent extends React.Component {
                 type: 'ajax',
                 url: '/data/basta.json',
                 reader: {
-                    rootProperty: function(obj)
-                    {
-                        switch (Ext.ComponentQuery.query('#lunchTabPanel')[0].getActiveItem()._itemId) {
+                    rootProperty: function (obj) {
+                        switch (Ext.ComponentQuery.query('#lunchTabPanel')[0].getActiveItem().getId()) {
                             case "MondayContainer":
                                 return obj.days[0].meals;
                             case "TuesdayContainer":
@@ -51,29 +51,28 @@ export default class LunchComponent extends React.Component {
                     }
                 }
             }
-        })
+        });
 
-        this.jarosiSoupsStore= Ext.create('Ext.data.JsonStore',{
-            autoload:true,
-            fields:['soups'],
-            proxy:{
-                type:'ajax',
-                url:'/data/jarosi.json',
-                reader:{
-                    rootProperty:'days'
-                }
-            }
-        })
-        this.jarosiStore=Ext.create('Ext.data.Store',{
-            autoLoad:true,
-            fields:['meals'],
+        this.jarosiSoupsStore = Ext.create('Ext.data.JsonStore', {
+            autoload: true,
+            fields: ['soups'],
             proxy: {
                 type: 'ajax',
                 url: '/data/jarosi.json',
                 reader: {
-                    rootProperty: function(obj)
-                    {
-                        switch (Ext.ComponentQuery.query('#lunchTabPanel1')[0].getActiveItem()._itemId) {
+                    rootProperty: 'days'
+                }
+            }
+        })
+        this.jarosiStore = Ext.create('Ext.data.Store', {
+            autoLoad: true,
+            fields: ['meals'],
+            proxy: {
+                type: 'ajax',
+                url: '/data/jarosi.json',
+                reader: {
+                    rootProperty: function (obj) {
+                        switch (Ext.ComponentQuery.query('#lunchTabPanel1')[0].getActiveItem().getId()) {
                             case "MondayContainer1":
                                 return obj.days[0].meals;
                             case "TuesdayContainer1":
@@ -91,9 +90,11 @@ export default class LunchComponent extends React.Component {
         })
 
         //-----Store's filters-----
-        this.bastaSoupsStore.filterBy(function (record) {
+
+        // The tabs are always synced, only one filter function is needed.
+        function filterStoreBy(record) {
             var recordId = record.get('day');
-            switch (Ext.ComponentQuery.query('#lunchTabPanel')[0].getActiveItem()._itemId) {
+            switch (Ext.ComponentQuery.query('#lunchTabPanel')[0].getActiveItem().getId()) {
                 case "MondayContainer":
                     if (recordId.includes('Pon')) {
                         return true;
@@ -120,183 +121,99 @@ export default class LunchComponent extends React.Component {
                     }
                     break;
             }
+        }
 
-        })
-        this.jarosiSoupsStore.filterBy(function(record){
-            var recordId = record.get('day');
-            switch (Ext.ComponentQuery.query('#lunchTabPanel1')[0].getActiveItem()._itemId) {
-                case "MondayContainer1":
-                    if (recordId.includes('Pon')) {
-                        return true;
-                    }
-                    break;
-                case "TuesdayContainer1":
-                    if (recordId.includes('Út')) {
-                        return true;
-                    }
-                    break;
-                case "WednesdayContainer1":
-                    if (recordId.includes('St')) {
-                        return true;
-                    }
-                    break;
-                case "ThursdayContainer1":
-                    if (recordId.includes('Čt')) {
-                        return true;
-                    }
-                    break;
-                case "FridayContainer1":
-                    if (recordId.includes('Pá')) {
-                        return true;
-                    }
-                    break;
-            }
-        })
+        this.bastaSoupsStore.filterBy(filterStoreBy);
+        this.jarosiSoupsStore.filterBy(filterStoreBy);
     }
 
-
     render() {
-            var bastaTitle="Pustkovecká Bašta"
-            var jarosiTitle="U Jarošů"
+            var bastaOriginalTitle = "Pustkovecká Bašta - ";
+            var bastaTitle= "Pustkovecká Bašta ";
+            var jarosiTitle="U Jarošů";
+
         return (
             <Container width="100%" height="100%">
                 <TabPanel id="lunchTabPanel"
-                    fullscreen="true"
-                    height="400"
-                    tabBarPosition="top">
-                    <Container title="Monday" id="MondayContainer"
-                               fullscreen="true"
-                        listeners={{
-                            activate: () => {
-                                this.bastaSoupsStore.load();
-                                this.bastaStore.load();
-                                if( typeof Ext.ComponentQuery.query('#lunchTabPanel1')[0] != 'undefined')
-                                {
-                                    Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(0)
+                          fullscreen="true"
+                          height="400"
+                          tabBarPosition="top"
+                          listeners={{
+                        activeItemchange: (sender, value, oldValue, eOpts ) => {
+                            this.bastaSoupsStore.load();
+                            this.bastaStore.load();
+                            
+                            // TODO: Does not work. It will always add title from one day back, idk why.
+                            //       Looks like the store is not yet loaded / fitler is not applied. 
+                            // var sp = this.bastaSoupsStore.load();
+                            // if (sp.getAt(0)) {
+                            //     bastaTitle = bastaOriginalTitle + sp.getAt(0).get('day');
+                            //     Ext.ComponentQuery.query('#' + value.getId() + ' grid')[0].setTitle(bastaTitle);
+                            // }
+                        
+                            Ext.first('#lunchTabPanel1').setActiveItem(sender.innerIndexOf(value));
 
-                                }
-                            }
-                        }} >
-                        <LunchDaySoupGrid store={this.bastaSoupsStore}title={bastaTitle}/>
-                        <LunchDayMealGrid store={this.bastaStore} />
-                    </Container>
-                    <Container title="Tuesday" id="TuesdayContainer"
-                               fullscreen="true"
-                        listeners={{
-                            activate: () => {
-                                this.bastaSoupsStore.load();
-                                this.bastaStore.load();
-                                Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(1)
-                            }
-                        }}>
-                        <LunchDaySoupGrid store={this.bastaSoupsStore}title={bastaTitle}/>
-                        <LunchDayMealGrid store={this.bastaStore} />
-                    </Container>
-                    <Container title="Wednesday" id="WednesdayContainer"
-                               fullscreen="true"
-                        listeners={{
-                            activate: () => {
-                                this.bastaSoupsStore.load();
-                                this.bastaStore.load();
-                                Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(2)
-                            }
-                        }} >
-                        <LunchDaySoupGrid store={this.bastaSoupsStore}title={bastaTitle}/>
-                        <LunchDayMealGrid store={this.bastaStore} />
-                    </Container>
-                    <Container title="Thursday" id="ThursdayContainer"
-                               fullscreen="true"
-                               listeners={{
-                                   activate: () => {
-                                       this.bastaSoupsStore.load();
-                                       this.bastaStore.load();
-                                       Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(3)
-                                   }
-                               }}>
+                        }
+                    }}
+                >
+                    <Container title="Monday" id="MondayContainer" fullscreen="true">
                         <LunchDaySoupGrid store={this.bastaSoupsStore} title={bastaTitle}/>
-                        <LunchDayMealGrid store={this.bastaStore} />
+                        <LunchDayMealGrid store={this.bastaStore}/>
                     </Container>
-                    <Container title="Friday" id="FridayContainer"
-                               fullscreen="true"
-                               listeners={{
-                                   activate: () => {
-                                       this.bastaSoupsStore.load();
-                                       this.bastaStore.load();
-                                       Ext.ComponentQuery.query('#lunchTabPanel1')[0].setActiveItem(4)
-                                   }
-                               }}>
-                        <LunchDaySoupGrid store={this.bastaSoupsStore}title={bastaTitle}/>
-                        <LunchDayMealGrid store={this.bastaStore} />
+                    <Container title="Tuesday" id="TuesdayContainer" fullscreen="true">
+                        <LunchDaySoupGrid store={this.bastaSoupsStore} title={bastaTitle}/>
+                        <LunchDayMealGrid store={this.bastaStore}/>
+                    </Container>
+                    <Container title="Wednesday" id="WednesdayContainer" fullscreen="true">
+                        <LunchDaySoupGrid store={this.bastaSoupsStore} title={bastaTitle}/>
+                        <LunchDayMealGrid store={this.bastaStore}/>
+                    </Container>
+                    <Container title="Thursday" id="ThursdayContainer" fullscreen="true">
+                        <LunchDaySoupGrid store={this.bastaSoupsStore} title={bastaTitle}/>
+                        <LunchDayMealGrid store={this.bastaStore}/>
+                    </Container>
+                    <Container title="Friday" id="FridayContainer" fullscreen="true">
+                        <LunchDaySoupGrid store={this.bastaSoupsStore} title={bastaTitle}/>
+                        <LunchDayMealGrid store={this.bastaStore}/>
                     </Container>
                 </TabPanel>
                 <TabPanel
                     id="lunchTabPanel1"
                     fullscreen="true"
                     height="400"
-                    tabBarPosition="bottom">
-                <Container title="Monday" id="MondayContainer1"
-                           fullscreen="true"
-                           listeners={{
-                               activate: () => {
-                                   this.jarosiSoupsStore.load();
-                                   this.jarosiStore.load();
-                                   Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(0)
-                               }
-                           }} >
-                    <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
-                    <LunchDayMealGrid store={this.bastaStore} />
-                </Container>
-                <Container title="Tuesday" id="TuesdayContainer1"
-                           fullscreen="true"
-                           listeners={{
-                               activate: () => {
-                                   this.jarosiSoupsStore.load();
-                                   this.jarosiStore.load();
-                                   Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(1)
-                               }
-                           }}>
-                    <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
-                    <LunchDayMealGrid store={this.bastaStore} />
-                </Container>
-                <Container title="Wednesday" id="WednesdayContainer1"
-                           fullscreen="true"
-                           listeners={{
-                               activate: () => {
-                                   this.bastaSoupsStore.load();
-                                   this.bastaStore.load();
-                                   Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(2)
-                               }
-                           }} >
-                    <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
-                    <LunchDayMealGrid store={this.bastaStore} />
-                </Container>
-                <Container title="Thursday" id="ThursdayContainer1"
-                           fullscreen="true"
-                           listeners={{
-                               activate: () => {
-                                   this.bastaSoupsStore.load();
-                                   this.bastaStore.load();
-                                   Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(3)
-                               }
-                           }}>
-                    <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
-                    <LunchDayMealGrid store={this.bastaStore} />
-                </Container>
-                <Container title="Friday" id="FridayContainer1"
-                           fullscreen="true"
-                           listeners={{
-                               activate: () => {
-                                   this.bastaSoupsStore.load();
-                                   this.bastaStore.load();
-                                   Ext.ComponentQuery.query('#lunchTabPanel')[0].setActiveItem(4)
-                               }
-                           }}>
-                    <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
-                    <LunchDayMealGrid store={this.bastaStore} />
-                </Container>
+                    tabBarPosition="bottom"
+                    listeners={{
+                        activeItemchange: (sender, value, oldValue, eOpts ) => {
+                            this.jarosiSoupsStore.load();
+                            this.jarosiStore.load();
+                        
+                            Ext.first('#lunchTabPanel').setActiveItem(sender.innerIndexOf(value));
+                        }
+                    }}
+                >
+                    <Container title="Monday" id="MondayContainer1" fullscreen="true">
+                        <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
+                        <LunchDayMealGrid store={this.jarosiStore}/>
+                    </Container>
+                    <Container title="Tuesday" id="TuesdayContainer1" fullscreen="true">
+                        <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
+                        <LunchDayMealGrid store={this.jarosiStore}/>
+                    </Container>
+                    <Container title="Wednesday" id="WednesdayContainer1" fullscreen="true">
+                        <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
+                        <LunchDayMealGrid store={this.jarosiStore}/>
+                    </Container>
+                    <Container title="Thursday" id="ThursdayContainer1" fullscreen="true">
+                        <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
+                        <LunchDayMealGrid store={this.jarosiStore}/>
+                    </Container>
+                    <Container title="Friday" id="FridayContainer1" fullscreen="true">
+                        <LunchDaySoupGrid store={this.jarosiSoupsStore} title={jarosiTitle}/>
+                        <LunchDayMealGrid store={this.jarosiStore}/>
+                    </Container>
 
                 </TabPanel>
-            </Container >
+            </Container>
         )
     }
 }
